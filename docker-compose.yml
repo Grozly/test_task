@@ -1,0 +1,25 @@
+version: "3.10"
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    volumes:
+      - ./config/:/mosquitto/config/:ro
+      - ./log/:/mosquitto/log/
+      - data:/mosquitto/data/
+    ports:
+      - 1883:1883
+      - 9001:9001
+
+  main:
+    build: ./main
+    restart: always
+    env_file:
+      - main.env
+    ports:
+      - 1234:1234
+    depends_on:
+      - mosquitto
+
+volumes:
+  data: ~
